@@ -44,7 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Update 3D tooltip info
                 const tooltipSpan = el.querySelector('.tt-info');
                 if (tooltipSpan) {
-                    tooltipSpan.textContent = `Crowd: ${density}%`;
+                    const wait = Math.floor(density * 0.2) + 2;
+                    tooltipSpan.innerHTML = `Crowd: ${density}%<br>Est. Wait: ~${wait}m`;
                 }
             }
         });
@@ -67,6 +68,71 @@ document.addEventListener('DOMContentLoaded', () => {
     currentLocation.addEventListener('change', (e) => focusCameraOn(e.target.value));
     destination.addEventListener('change', (e) => focusCameraOn(e.target.value));
 
+    // --- Route Drawing Logic ---
+    const routeSvg = document.getElementById('route-svg');
+
+    // Define coords for each zone (matches top/left % in 400x400 container)
+    const coords = {
+        'Gate A': { x: 80, y: 320 },
+        'Gate B': { x: 200, y: 320 },
+        'Gate C': { x: 320, y: 320 },
+        'Food Court': { x: 320, y: 80 },
+        'Restrooms': { x: 80, y: 80 },
+        'Merchandise': { x: 40, y: 200 },
+        'Section 101': { x: 360, y: 200 }
+    };
+
+    /**
+     * Draws an animated SVG path on the 3D map
+     */
+    function drawRoute(start, end, isAlternate) {
+        // Clear previous routes
+        routeSvg.innerHTML = '';
+
+        if (!coords[start] || !coords[end]) return;
+
+        const p1 = coords[start];
+        const p2 = coords[end];
+
+        let pathD = '';
+        if (isAlternate) {
+            // Draw a curved path avoiding the center
+            const midX = (p1.x + p2.x) / 2;
+            const midY = (p1.y + p2.y) / 2;
+            
+            const dx = p2.x - p1.x;
+            const dy = p2.y - p1.y;
+            
+            let nx = -dy;
+            let ny = dx;
+            
+            const length = Math.sqrt(nx*nx + ny*ny);
+            if (length > 0) { nx /= length; ny /= length; }
+            
+            // Push outwards towards the edge, away from center (200, 200)
+            const cxToMid = midX - 200;
+            const cyToMid = midY - 200;
+            
+            if ((nx * cxToMid + ny * cyToMid) < 0) {
+                nx = -nx;
+                ny = -ny;
+            }
+            
+            const controlX = midX + nx * 120;
+            const controlY = midY + ny * 120;
+            
+            pathD = `M ${p1.x} ${p1.y} Q ${controlX} ${controlY} ${p2.x} ${p2.y}`;
+        } else {
+            // Direct path
+            pathD = `M ${p1.x} ${p1.y} L ${p2.x} ${p2.y}`;
+        }
+
+        const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        pathElement.setAttribute('d', pathD);
+        pathElement.setAttribute('class', `route-path ${isAlternate ? 'alternate' : ''}`);
+
+        routeSvg.appendChild(pathElement);
+    }
 
     // --- Core Routing Logic ---
     
@@ -80,7 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Simulate a loading state for better user experience
         const originalText = checkBtn.textContent;
-        checkBtn.textContent = 'Calculating...';
+        checkBtn.classList.add('loading');
+        checkBtn.innerHTML = '<span class="spinner"></span> Calculating...';
         checkBtn.disabled = true;
 
         setTimeout(() => {
@@ -97,9 +164,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             // Restore button state
+            checkBtn.classList.remove('loading');
             checkBtn.textContent = originalText;
             checkBtn.disabled = false;
-        }, 600);
+        }, 1200);
     });
 
     /**
@@ -115,9 +183,11 @@ document.addEventListener('DOMContentLoaded', () => {
         let crowdLevel = destData.level.charAt(0).toUpperCase() + destData.level.slice(1);
         let routeSuggestion = '';
         let baseWaitTime = 0;
+        let isAlternate = false;
 
         // Determine severity based on density percentage
         if (density >= 75) {
+            isAlternate = true;
             baseWaitTime = Math.floor(density * 0.3) + 5; // Scales up to ~35 mins
             routeSuggestion = `🚨 Severe Congestion (${density}% density): The main route from ${start} to ${end} is packed. Suggestion: Take the exterior alternative route to save time.`;
         } else if (density >= 35) {
@@ -133,6 +203,16 @@ document.addEventListener('DOMContentLoaded', () => {
         crowdLevelEl.className = `value ${crowdLevel.toLowerCase()}`;
         waitTimeEl.textContent = `~${baseWaitTime} mins`;
         routeTextEl.textContent = routeSuggestion;
+        
+        // Highlight Selected Zones
+        document.querySelectorAll('.zone.block').forEach(z => z.classList.remove('selected-zone'));
+        const startZone = zones.find(z => z.name === start);
+        const endZone = zones.find(z => z.name === end);
+        if (startZone) document.getElementById(startZone.id).classList.add('selected-zone');
+        if (endZone) document.getElementById(endZone.id).classList.add('selected-zone');
+        
+        // Draw the animated route
+        drawRoute(start, end, isAlternate);
         
         // Pan the camera to the destination zone to highlight it
         focusCameraOn(end);
@@ -179,4 +259,26 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 300); // Wait for the fade-out CSS animation to complete
         }, 4000);
     }
+
+    // --- Micro-Interactions ---
+    
+    // Add Ripple Effect to all buttons
+    document.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            const x = e.clientX - e.target.getBoundingClientRect().left;
+            const y = e.clientY - e.target.getBoundingClientRect().top;
+            
+            const ripple = document.createElement('span');
+            ripple.className = 'ripple';
+            ripple.style.left = `${x}px`;
+            ripple.style.top = `${y}px`;
+            
+            this.appendChild(ripple);
+            
+            // Remove ripple element after animation completes
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        });
+    });
 });
