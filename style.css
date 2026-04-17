@@ -2,7 +2,7 @@
     --bg-color: #0f172a;
     --card-bg: rgba(15, 23, 42, 0.45);
     --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
+    --text-secondary: #cbd5e1; /* Lightened for better contrast */
     --primary-color: #3b82f6;
     --primary-hover: #2563eb;
     --success: #10b981;
@@ -16,6 +16,12 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Inter', sans-serif;
+}
+
+/* Accessibility Focus Outlines */
+*:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
 }
 
 @keyframes gradientBg {
