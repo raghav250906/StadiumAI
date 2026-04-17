@@ -8,65 +8,111 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>StadiumAI</h1>
-            <p>Smart Event Assistant</p>
-        </header>
-
-        <main>
-            <div class="card input-section">
-                <div class="form-group">
-                    <label for="current-location">Current Location</label>
-                    <select id="current-location">
-                        <option value="" disabled selected>Select your location</option>
-                        <option value="Gate A">Gate A</option>
-                        <option value="Gate B">Gate B</option>
-                        <option value="Gate C">Gate C</option>
-                    </select>
+    <div class="app-layout">
+        <!-- 3D Map Area -->
+        <div id="stadium-wrapper">
+            <div id="stadium-map" class="view-default">
+                <div class="pitch"></div>
+                <!-- Zones -->
+                <div class="zone block" id="zone-gate-a" data-zone="Gate A" style="top: 80%; left: 20%;">
+                    <div class="face top">Gate A</div><div class="face front"></div><div class="face right"></div>
+                    <div class="tooltip">Gate A<br><span class="tt-info">Calculating...</span></div>
                 </div>
-
-                <div class="form-group">
-                    <label for="destination">Destination</label>
-                    <select id="destination">
-                        <option value="" disabled selected>Select destination</option>
-                        <option value="Section 101">Section 101</option>
-                        <option value="Food Court">Food Court</option>
-                        <option value="Restrooms">Restrooms</option>
-                        <option value="Merchandise">Merchandise</option>
-                    </select>
+                <div class="zone block" id="zone-gate-b" data-zone="Gate B" style="top: 80%; left: 50%;">
+                    <div class="face top">Gate B</div><div class="face front"></div><div class="face right"></div>
+                    <div class="tooltip">Gate B<br><span class="tt-info">Calculating...</span></div>
                 </div>
-
-                <button id="check-btn" class="primary-btn">Find Best Route</button>
-            </div>
-
-            <div class="card result-section hidden" id="result-card">
-                <h2>Route Status</h2>
-                
-                <div class="status-grid">
-                    <div class="status-item">
-                        <span class="label">
-                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                            Crowd Level
-                        </span>
-                        <span class="value" id="crowd-level">-</span>
-                    </div>
-                    <div class="status-item">
-                        <span class="label">
-                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                            Est. Wait Time
-                        </span>
-                        <span class="value" id="wait-time">-</span>
-                    </div>
+                <div class="zone block" id="zone-gate-c" data-zone="Gate C" style="top: 80%; left: 80%;">
+                    <div class="face top">Gate C</div><div class="face front"></div><div class="face right"></div>
+                    <div class="tooltip">Gate C<br><span class="tt-info">Calculating...</span></div>
                 </div>
-
-                <div class="route-suggestion">
-                    <h3>Suggested Route</h3>
-                    <p id="route-text">-</p>
+                <div class="zone block" id="zone-food-court" data-zone="Food Court" style="top: 20%; left: 80%;">
+                    <div class="face top">Food Court</div><div class="face front"></div><div class="face right"></div>
+                    <div class="tooltip">Food Court<br><span class="tt-info">Calculating...</span></div>
+                </div>
+                <div class="zone block" id="zone-restrooms" data-zone="Restrooms" style="top: 20%; left: 20%;">
+                    <div class="face top">Restrooms</div><div class="face front"></div><div class="face right"></div>
+                    <div class="tooltip">Restrooms<br><span class="tt-info">Calculating...</span></div>
+                </div>
+                <div class="zone block" id="zone-merchandise" data-zone="Merchandise" style="top: 50%; left: 10%;">
+                    <div class="face top">Merch</div><div class="face front"></div><div class="face right"></div>
+                    <div class="tooltip">Merchandise<br><span class="tt-info">Calculating...</span></div>
+                </div>
+                <div class="zone block" id="zone-section-101" data-zone="Section 101" style="top: 50%; left: 90%;">
+                    <div class="face top">Sec 101</div><div class="face front"></div><div class="face right"></div>
+                    <div class="tooltip">Section 101<br><span class="tt-info">Calculating...</span></div>
                 </div>
             </div>
-        </main>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="container">
+            <header>
+                <h1>StadiumAI</h1>
+                <p>Smart Event Assistant</p>
+            </header>
+
+            <main>
+                <div class="card input-section">
+                    <div class="form-group">
+                        <label for="current-location">Current Location</label>
+                        <select id="current-location">
+                            <option value="" disabled selected>Select your location</option>
+                            <option value="Gate A">Gate A</option>
+                            <option value="Gate B">Gate B</option>
+                            <option value="Gate C">Gate C</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="destination">Destination</label>
+                        <select id="destination">
+                            <option value="" disabled selected>Select destination</option>
+                            <option value="Section 101">Section 101</option>
+                            <option value="Food Court">Food Court</option>
+                            <option value="Restrooms">Restrooms</option>
+                            <option value="Merchandise">Merchandise</option>
+                        </select>
+                    </div>
+
+                    <button id="check-btn" class="primary-btn">Find Best Route</button>
+                    
+                    <div class="action-buttons">
+                        <button id="food-btn" class="secondary-btn">🍔 Nearest Food Stall</button>
+                        <button id="emergency-btn" class="danger-btn">⚠️ Emergency Alert</button>
+                    </div>
+                </div>
+
+                <div class="card result-section hidden" id="result-card">
+                    <h2>Route Status</h2>
+                    
+                    <div class="status-grid">
+                        <div class="status-item">
+                            <span class="label">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                                Crowd Level
+                            </span>
+                            <span class="value" id="crowd-level">-</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="label">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                Est. Wait Time
+                            </span>
+                            <span class="value" id="wait-time">-</span>
+                        </div>
+                    </div>
+
+                    <div class="route-suggestion">
+                        <h3>Suggested Route</h3>
+                        <p id="route-text">-</p>
+                    </div>
+                </div>
+            </main>
+        </div>
     </div>
+    
+    <div id="notification-container" class="notification-container"></div>
     <script src="script.js"></script>
 </body>
 </html>
