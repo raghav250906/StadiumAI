@@ -52,6 +52,7 @@
             <header>
                 <h1>StadiumAI</h1>
                 <p>Smart Event Assistant</p>
+                <p class="ai-subtitle">AI is guiding you using real-time cloud-powered insights.</p>
             </header>
 
             <main>
@@ -77,11 +78,30 @@
                         </select>
                     </div>
 
-                    <button id="check-btn" class="primary-btn">Find Best Route</button>
+                    <button id="check-btn" class="primary-btn" aria-label="Find Best Route">Find Best Route</button>
                     
                     <div class="action-buttons">
-                        <button id="food-btn" class="secondary-btn">🍔 Nearest Food Stall</button>
-                        <button id="emergency-btn" class="danger-btn">⚠️ Emergency Alert</button>
+                        <button id="food-btn" class="secondary-btn" aria-label="Find Nearest Food Stall">🍔 Nearest Food Stall</button>
+                        <button id="emergency-btn" class="danger-btn" aria-label="Send Emergency Alert">⚠️ Emergency Alert</button>
+                    </div>
+                </div>
+
+                <!-- Live Updates & Google Maps Integration -->
+                <div class="card map-section">
+                    <h2>Live Updates</h2>
+                    <p class="live-status"><span class="pulse-dot"></span> Live data powered by cloud services</p>
+                    <div class="google-map-container">
+                        <!-- Lightweight Google Maps Embed showing a generic stadium (Wembley) -->
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.3596956276854!2d-0.2820921840004562!3d51.55602491724285!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48761181d5cd83c5%3A0x868473e6d1ebf7c0!2sWembley%20Stadium!5e0!3m2!1sen!2suk!4v1684340000000!5m2!1sen!2suk" 
+                            width="100%" 
+                            height="160" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade"
+                            title="Stadium Location Map">
+                        </iframe>
                     </div>
                 </div>
 

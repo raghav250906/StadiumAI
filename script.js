@@ -51,8 +51,24 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- Mock Firebase Simulation ---
+    /**
+     * Simulates receiving real-time cloud data updates via Firebase/WebSockets.
+     * Randomly adjusts crowd levels across the stadium periodically.
+     */
+    function simulateLiveUpdates() {
+        setInterval(() => {
+            // Update the crowd data for a live feel
+            initializeCrowd();
+            
+            // Note: In a real production app, this would be replaced with:
+            // firebase.database().ref('stadium/zones').on('value', (snapshot) => { ... })
+        }, 8000); // Poll every 8 seconds
+    }
+
     // Call on load to paint the 3D map
     initializeCrowd();
+    simulateLiveUpdates(); // Start cloud simulation
 
     // --- Camera Control Logic ---
     function focusCameraOn(locationName) {
