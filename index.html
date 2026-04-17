@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StadiumAI - Smart Event Assistant</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>StadiumAI</h1>
+            <p>Smart Event Assistant</p>
+        </header>
+
+        <main>
+            <div class="card input-section">
+                <div class="form-group">
+                    <label for="current-location">Current Location</label>
+                    <select id="current-location">
+                        <option value="" disabled selected>Select your location</option>
+                        <option value="Gate A">Gate A</option>
+                        <option value="Gate B">Gate B</option>
+                        <option value="Gate C">Gate C</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="destination">Destination</label>
+                    <select id="destination">
+                        <option value="" disabled selected>Select destination</option>
+                        <option value="Section 101">Section 101</option>
+                        <option value="Food Court">Food Court</option>
+                        <option value="Restrooms">Restrooms</option>
+                        <option value="Merchandise">Merchandise</option>
+                    </select>
+                </div>
+
+                <button id="check-btn" class="primary-btn">Find Best Route</button>
+            </div>
+
+            <div class="card result-section hidden" id="result-card">
+                <h2>Route Status</h2>
+                
+                <div class="status-grid">
+                    <div class="status-item">
+                        <span class="label">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                            Crowd Level
+                        </span>
+                        <span class="value" id="crowd-level">-</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="label">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            Est. Wait Time
+                        </span>
+                        <span class="value" id="wait-time">-</span>
+                    </div>
+                </div>
+
+                <div class="route-suggestion">
+                    <h3>Suggested Route</h3>
+                    <p id="route-text">-</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
