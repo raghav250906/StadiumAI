@@ -1,4 +1,4 @@
-# 🚀 StadiumAI – Smart Event Assistant
+[# 🚀 StadiumAI – Smart Event Assistant
 
 ## 🏟️ Overview
 
